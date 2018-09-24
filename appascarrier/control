@@ -1,0 +1,9 @@
+Package: com.tonyk7.appascarrier
+Name: AppAsCarrier
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Set current running app as carrier. (iOS 8 - 11.1.2)
+Maintainer: Tony
+Author: Tony
+Section: Tweaks

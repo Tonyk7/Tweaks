@@ -1,0 +1,9 @@
+Package: com.tonyk7.snapkill
+Name: SnapKill
+Depends: mobilesubstrate
+Version: 0.0.4
+Architecture: iphoneos-arm
+Description: On exit of snapchat, kill background instance and applecamerad daemon for iOS 11
+Maintainer: Tony
+Author: Tony
+Section: Tweaks
