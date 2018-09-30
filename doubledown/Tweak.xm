@@ -4,11 +4,6 @@
 +(CGSize)defaultIconSize; /* iOS 5 - 11.1.2 */
 @end
 
-@interface FBSystemService : NSObject
-+(id)sharedInstance;
--(void)exitAndRelaunch:(BOOL)arg1;
-@end
-
 typedef struct SBIconCoordinate {
 	long long row;
 	long long col;
