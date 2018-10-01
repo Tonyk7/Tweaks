@@ -33,7 +33,7 @@ static BOOL isEnabled;
 -(void)_updateProcess:(id)arg1 withState:(FBProcessState *)state {
 	%orig;
 	if ([state visibility] == 1 && isEnabled && [appsToKill containsObject:[self bundleIdentifier]]) {
-		// Kill app that we just existed if that app should be killed
+		// Kill app that we just exited if that app should be killed
 		SBMainSwitcherViewController *sbmsvc = [%c(SBMainSwitcherViewController) sharedInstanceIfExists];
 		SBDisplayItem *item = [objc_getClass("SBDisplayItem") displayItemWithType:@"App" displayIdentifier:[self bundleIdentifier]];
 		// get SBAppLayout from SBDisplayItem
