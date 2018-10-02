@@ -18,7 +18,7 @@ static BOOL isEnabled;
 %hook SBIconController
 
 /* iOS 7 - 11.1.2 */
--(unsigned long long)maxIconCountForDock {
+-(NSUInteger)maxIconCountForDock {
 	return (maxCount = %orig);
 }
 
@@ -27,12 +27,12 @@ static BOOL isEnabled;
 %hook SBDockIconListView
 
 /* iOS 4 - 11.1.2 */
-+(unsigned long long)iconRowsForInterfaceOrientation:(long long)arg1 {
++(NSUInteger)iconRowsForInterfaceOrientation:(long long)arg1 {
 	return 2;
 }
 
 /* iOS 4 - 11.1.2 */
--(unsigned long long)iconsInRowForSpacingCalculation {	
+-(NSUInteger)iconsInRowForSpacingCalculation {	
 	return maxCount/2;
 }
 
