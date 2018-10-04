@@ -9,4 +9,4 @@ hope something helps you in some way \#LLJ
 | [SnapKill](https://github.com/Tonyk7/Tweaks/tree/master/snapkill) | Kill snapchat and applecamerad on snapchat exit  | aimed @ 11.X | Partially |
 | [DoubleDown](https://github.com/Tonyk7/Tweaks/tree/master/doubledown) | Add second row to dock | iOS 7 - 11.1.2 | Nope |
 | [BackgroundKill](https://github.com/Tonyk7/Tweaks/tree/master/backgroundkill) | Kill chosen apps from background on exit | aimed @ 11.X | Partially |
-| [Shadowed](https://github.com/Tonyk7/Tweaks/tree/master/shadowed) | Hide chosen apps from app switcher | aimeed @ 11.X | Nope |
+| [Shadowed](https://github.com/Tonyk7/Tweaks/tree/master/shadowed) | Hide chosen apps from app switcher | aimed @ 11.X | Nope |
