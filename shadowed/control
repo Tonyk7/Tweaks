@@ -1,0 +1,9 @@
+Package: com.tonyk7.shadowed
+Name: Shadowed
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Hide selected apps in app switcher. Supports iOS 11.X
+Maintainer: Tony
+Author: Tony
+Section: Tweaks
