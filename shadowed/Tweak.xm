@@ -29,8 +29,8 @@ static void reloadPrefs() {
 
 	[apps enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
 		BOOL shouldHideApp = [[apps objectForKey:key] boolValue];
-		if (shouldHideApp && ![blacklist containsObject:key])
-			[blacklist addObject:key];
+		if (shouldHideApp && [key hasPrefix:@"shadowed-"] && ![blacklist containsObject:key])
+			[blacklist addObject:[key stringByReplacingOccurrencesOfString:@"shadowed-" withString:@""]];
 	}];
 }
 
