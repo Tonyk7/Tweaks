@@ -1,9 +1,0 @@
-Package: com.tonyk7.backgroundkill
-Name: BackgroundKill
-Depends: mobilesubstrate
-Version: 0.0.1
-Architecture: iphoneos-arm
-Description: Kill chosen apps from background on exit. Supports iOS 11
-Maintainer: Tony
-Author: Tony
-Section: Tweaks

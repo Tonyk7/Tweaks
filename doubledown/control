@@ -1,9 +1,0 @@
-Package: com.tonyk7.doubledown
-Name: DoubleDown
-Depends: mobilesubstrate
-Version: 0.0.1
-Architecture: iphoneos-arm
-Description: Add a second row to the dock. Supports iOS 7 - 11.1.2.
-Maintainer: Tony
-Author: Tony
-Section: Tweaks
