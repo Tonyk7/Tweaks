@@ -2,7 +2,7 @@
 #import <Preferences/PSListController.h>
 #import <Preferences/PSTableCell.h>
 #import <Preferences/PSSwitchTableCell.h>
-#include "XXXRootListController.h"
+#include "BackgroundKillRootListController.h"
 
 #define application [UIApplication sharedApplication]
 
@@ -108,7 +108,7 @@
 
 @end
 
-@implementation XXXRootListController
+@implementation BackgroundKillRootListController
 
 - (NSArray *)specifiers {
 	if (!_specifiers) {
