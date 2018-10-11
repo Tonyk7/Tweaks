@@ -2,7 +2,7 @@
 #import <Preferences/PSListController.h>
 #import <Preferences/PSTableCell.h>
 #import <Preferences/PSSwitchTableCell.h>
-#include "XXXRootListController.h"
+#include "ShadowedRootListController.h"
 
 #define application [UIApplication sharedApplication]
 
@@ -109,7 +109,7 @@
 
 @end
 
-@implementation XXXRootListController
+@implementation ShadowedRootListController
 
 - (NSArray *)specifiers {
 	if (!_specifiers) {

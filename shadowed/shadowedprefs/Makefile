@@ -3,7 +3,7 @@ include $(THEOS)/makefiles/common.mk
 export TARGET=iphone:9.2:9.2
 
 BUNDLE_NAME = ShadowedPrefs
-ShadowedPrefs_FILES = XXXRootListController.m
+ShadowedPrefs_FILES = ShadowedRootListController.m
 ShadowedPrefs_INSTALL_PATH = /Library/PreferenceBundles
 ShadowedPrefs_FRAMEWORKS = UIKit
 ShadowedPrefs_LIBRARIES = applist
