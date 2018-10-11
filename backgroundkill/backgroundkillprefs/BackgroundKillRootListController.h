@@ -1,5 +1,5 @@
 #import <Preferences/PSListController.h>
 
-@interface XXXRootListController : PSListController
+@interface BackgroundKillRootListController : PSListController
 
 @end
