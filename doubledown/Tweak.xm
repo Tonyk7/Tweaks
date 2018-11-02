@@ -1,52 +1,47 @@
 #define kIsEnabled @"enabled"
 
 @interface SBIconView : UIView
-+ (CGSize)defaultIconSize; /* iOS 5 - 11.1.2 */
-@end
-
-@interface SBDockIconListView : UIView
-@end
-
-@interface SBDockView : UIView
++(CGSize)defaultIconSize; /* iOS 5 - 11.1.2 */
 @end
 
 typedef struct SBIconCoordinate {
-    long long row;
-    long long col;
+	long long row;
+	long long col;
 } SBIconCoordinate;
 
-static double defaultHeight;
+
+static double defaultHeight; 
 static unsigned long long maxCount;
 static BOOL isEnabled;
 
-% group tweak % hook SBIconController
+
+%hook SBIconController
 
 /* iOS 7 - 11.1.2 */
-- (unsigned long long)maxIconCountForDock {
-    return (maxCount = % orig);
+-(unsigned long long)maxIconCountForDock {
+	return isEnabled ? (maxCount = %orig) : %orig;
 }
 
-% end
+%end
 
-% hook SBDockIconListView +
-(unsigned long long)maxIcons {
-    return (maxCount = % orig);
-}
+%hook SBDockIconListView
+
 /* iOS 4 - 11.1.2 */
-+ (unsigned long long)iconRowsForInterfaceOrientation:(long long)arg1 {
-    return 2;
++(unsigned long long)iconRowsForInterfaceOrientation:(long long)arg1 {
+	return isEnabled ? 2 : %orig;
 }
 
 /* iOS 4 - 11.1.2 */
-- (unsigned long long)iconsInRowForSpacingCalculation {
-    return maxCount / 2;
+-(unsigned long long)iconsInRowForSpacingCalculation {	
+	return isEnabled ? maxCount/2 : %orig;
 }
 
 /* iOS 7 - 11.1.2 */
-+ (double)defaultHeight {
-    defaultHeight = defaultHeight ?: defaultHeight = % orig;
-    return defaultHeight * 2;
++(double)defaultHeight {
+	defaultHeight = defaultHeight ?: defaultHeight = %orig;
+	return isEnabled ? defaultHeight*2 : %orig;
 }
+
 /* iOS 7 - 11.1.2 */
 - (CGPoint)originForIconAtCoordinate:(struct SBIconCoordinate)arg1 {
     CGPoint original = % orig;
@@ -55,44 +50,39 @@ static BOOL isEnabled;
     
     CGFloat iconHeight = [% c(SBIconView) defaultIconSize].height;
     
-    CGPoint newOrig = CGPointMake(
-                                  original.x, (self.bounds.size.height - (iconHeight * 2)) / 2);
+    CGPoint newOrig = CGPointMake(original.x, (self.bounds.size.height - (iconHeight * 2)) / 2);
+    
     if (arg1.row == 2) {
-        return CGPointMake(
-                           newOrig.x, newOrig.y + [% c(SBIconView) defaultIconSize].height);
+        
+        return CGPointMake(newOrig.x, newOrig.y + [% c(SBIconView) defaultIconSize].height);
     }
+    
     return newOrig;
 }
-% end
 
-% hook SBDockView
+%end
+
+%hook SBDockView
 
 /* iOS 7 - 11.1.2 */
-+ (double)defaultHeight {
-    return defaultHeight * 2;
++(double)defaultHeight {
+	return isEnabled ? defaultHeight*2 : %orig;
 }
 
-% end
+%end
 
-static void
-reloadPrefs() {
-    NSDictionary *prefs = [NSDictionary
-                           dictionaryWithContentsOfFile:
-                           @"/var/mobile/Library/Preferences/com.tonyk7.doubledown.plist"];
-    if (prefs)
-    isEnabled =
-    [prefs objectForKey:kIsEnabled]
-    ? ((NSNumber *)[prefs objectForKey:kIsEnabled]).boolValue
-    : YES;
+static void reloadPrefs() {
+	static NSUserDefaults *prefs = [[NSUserDefaults alloc] initWithSuiteName:@"com.tonyk7.doubledown"];
+	if (prefs)
+		isEnabled = [prefs objectForKey:kIsEnabled] ? ((NSNumber *)[prefs objectForKey:kIsEnabled]).boolValue : YES;
 }
 
-% ctor {
-    CFNotificationCenterAddObserver(
-                                    CFNotificationCenterGetDarwinNotifyCenter(), NULL,
-                                    (CFNotificationCallback)reloadPrefs,
-                                    CFSTR("com.tonyk7.doubledown/prefsChanged"), NULL,
-                                    CFNotificationSuspensionBehaviorDeliverImmediately);
-    reloadPrefs();
-    if (isEnabled)
-    % init(tweak);
+%ctor {
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+									NULL,
+									(CFNotificationCallback)reloadPrefs,
+									CFSTR("com.tonyk7.doubledown/prefsChanged"),
+									NULL,
+									CFNotificationSuspensionBehaviorDeliverImmediately);
+	reloadPrefs();
 }
