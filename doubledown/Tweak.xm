@@ -55,13 +55,13 @@ static BOOL isEnabled;
     
     CGFloat iconHeight = [% c(SBIconView) defaultIconSize].height;
     
-    CGPoint orig = CGPointMake(
-                               original.x, (self.bounds.size.height - (iconHeight * 2)) / 2);
+    CGPoint newOrig = CGPointMake(
+                                  original.x, (self.bounds.size.height - (iconHeight * 2)) / 2);
     if (arg1.row == 2) {
-        return CGPointMake(orig.x,
-                           orig.y + [% c(SBIconView) defaultIconSize].height);
+        return CGPointMake(
+                           newOrig.x, newOrig.y + [% c(SBIconView) defaultIconSize].height);
     }
-    return orig;
+    return newOrig;
 }
 % end
 
