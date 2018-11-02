@@ -45,7 +45,7 @@ static BOOL isEnabled;
 /* iOS 7 - 11.1.2 */
 -(CGPoint)originForIconAtCoordinate:(struct SBIconCoordinate)arg1 {
     CGPoint orig = %orig;
-    CGFloat iconHeight = [% c(SBIconView) defaultIconSize].height;
+    CGFloat iconHeight = [%c(SBIconView) defaultIconSize].height;
     CGPoint newOrig = CGPointMake(orig.x, (self.bounds.size.height - (iconHeight * 2)) / 2);
     if (arg1.row == 2) {
         return CGPointMake(newOrig.x, newOrig.y + iconHeight);
