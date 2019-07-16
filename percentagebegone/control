@@ -1,0 +1,10 @@
+Package: com.tonyk7.percentagebegone
+Name: PercentageBeGone
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Hide percentage symbol in status bar. (iOS 4 - 12.X) (not a12)
+Maintainer: Tony
+Author: Tony
+Section: Tweaks
+Depiction: https://tonyk7.github.io/description.html?id=com.tonyk7.percentagebegone
