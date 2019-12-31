@@ -13,3 +13,4 @@ hope something helps you in some way \#LLJ
 | [BackgroundKill](https://github.com/Tonyk7/Tweaks/tree/master/backgroundkill) | Kill chosen apps from background on exit | aimed @ 11.X | Partially |
 | [Shadowed](https://github.com/Tonyk7/Tweaks/tree/master/shadowed) | Hide chosen apps from app switcher | aimed @ 11.X | Nope |
 | [PercentageBeGone](https://github.com/Tonyk7/Tweaks/tree/master/percentagebegone) | Hide percentage symbol in status bar | iOS 4 - 12.X | Nope |
+| [SpotifyLyrics](https://github.com/Tonyk7/Tweaks/tree/master/spotifylyrics) | Get lyrics in spotify | iOS 9+ | Nope |

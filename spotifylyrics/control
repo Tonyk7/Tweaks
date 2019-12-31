@@ -1,0 +1,9 @@
+Package: com.tonyk7.spotifylyrics
+Name: SpotifyLyrics
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Lyrics on spotify (iOS 9+)
+Maintainer: Tony
+Author: Tony
+Section: Tweaks
