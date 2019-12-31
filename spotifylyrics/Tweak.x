@@ -1,6 +1,8 @@
 #import <CommonCrypto/CommonDigest.h>
 #include <objc/runtime.h>
 
+/* tweak based on https://github.com/julioverne/MusiLyric */
+
 #define kLyricViewTag 420420
 #define tmpLyricDir [NSTemporaryDirectory() stringByAppendingString:@"/SpotifyLyrics/"]
 
