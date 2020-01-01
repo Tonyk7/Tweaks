@@ -4,7 +4,15 @@
 /* tweak based on https://github.com/julioverne/MusiLyric */
 
 #define kLyricViewTag 420420
-#define tmpLyricDir [NSTemporaryDirectory() stringByAppendingString:@"/SpotifyLyrics/"]
+#define tmpLyricDir [NSTemporaryDirectory() stringByAppendingString:@"SpotifyLyrics/"]
+
+@interface SPTAlertController : NSObject
+-(void)showAlertWithTitle:(NSString *)arg1 message:(NSString *)arg2 buttonText:(NSString *)arg3 target:(NSObject *)arg4 action:(SEL)arg5 withCancelButton:(BOOL)arg6;
+@end
+
+@interface SPTStorageSettingsSection : NSObject
+@property(retain, nonatomic) SPTAlertController *alertController;
+@end
 
 @interface SPTPlayerTrack : NSObject
 @property(readonly, nonatomic) NSString *trackTitle;
@@ -38,6 +46,11 @@
 @property(retain, nonatomic) UITextView *lyricsTextView;
 @end
 
+@interface NSDictionary (safe)
+-(NSDictionary *)safeValueDictionary;
+-(id)safeValueForKey:(NSString *)key;
+@end
+
 @interface NSString (sha1)
 -(NSString *)sha1;
 @end
@@ -45,14 +58,14 @@
 @implementation NSString (sha1)
 // https://stackoverflow.com/a/7571583
 -(NSString *)sha1 {
-    NSData *data = [self dataUsingEncoding:NSUTF8StringEncoding];
-    uint8_t digest[CC_SHA1_DIGEST_LENGTH];
-    CC_SHA1(data.bytes, (CC_LONG)data.length, digest);
-    NSMutableString *output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];
-    for (int i = 0; i < CC_SHA1_DIGEST_LENGTH; i++) {
-        [output appendFormat:@"%02x", digest[i]];
-    }
-    return output;
+	NSData *data = [self dataUsingEncoding:NSUTF8StringEncoding];
+	uint8_t digest[CC_SHA1_DIGEST_LENGTH];
+	CC_SHA1(data.bytes, (CC_LONG)data.length, digest);
+	NSMutableString *output = [NSMutableString stringWithCapacity:CC_SHA1_DIGEST_LENGTH * 2];
+	for (int i = 0; i < CC_SHA1_DIGEST_LENGTH; i++) {
+		[output appendFormat:@"%02x", digest[i]];
+	}
+	return output;
 }
 @end
 
@@ -73,6 +86,7 @@
 	});
 }
 
+
 -(void)updateLyricsWithTrackTitle:(NSString *)title artist:(NSString *)artist album:(NSString *)album {
 	if (!title || !artist || !album) {
 		[self updateLyricsTextViewWithText:@"failed"];
@@ -90,9 +104,11 @@
 		[request setHTTPMethod:@"GET"];
 		[[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
 			NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-			NSString *lyrics = results[@"message"][@"body"][@"macro_calls"][@"track.lyrics.get"][@"message"][@"body"][@"lyrics"][@"lyrics_body"];
-			[self updateLyricsTextViewWithText:lyrics ?: @"failed"];
-			[lyrics writeToFile:tmpLyricFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+			NSDictionary *lyrics_body = results[@"message"][@"body"][@"macro_calls"][@"track.lyrics.get"][@"message"][@"body"];
+			BOOL lyrics_avaliable = lyrics_body.count > 0;
+			[self updateLyricsTextViewWithText:lyrics_avaliable ? [lyrics_body valueForKeyPath:@"lyrics.lyrics_body"]: @"failed"];
+			if (lyrics_avaliable)
+				[[lyrics_body valueForKeyPath:@"lyrics.lyrics_body"] writeToFile:tmpLyricFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
 		}] resume];
 	}
 }
@@ -153,6 +169,24 @@ because if you do it that way then open the now playing view for first time sinc
 -(void)coverArtTapped {
 	SPTPlayerTrack *track = self.viewModel.nowPlayingModel.displayedMetadata;
 	[[objc_getClass("SpotifyLyrics") sharedInstance] toggleLyricView:self.imageView forSongTitle:track.trackTitle byArtist:track.artistTitle inAlbum:track.albumTitle];
+}
+
+%end
+
+/* add alert asking to clear lyric cache directory if user wants to delete spotify cache */
+%hook SPTStorageSettingsSection
+
+-(void)deleteCache {
+	%orig;
+	[self.alertController showAlertWithTitle:@"Delete lyric cache?" message:@"Delete temporarily saved lyrics?" buttonText:@"Yes" target:self action:@selector(clearLyricCache) withCancelButton:YES];
+}
+%new
+-(void)clearLyricCache {
+	NSString *lyricCacheDir = tmpLyricDir;
+	NSFileManager *df = [NSFileManager defaultManager];
+	for (NSString *filename in [df contentsOfDirectoryAtPath:lyricCacheDir error:nil])  {
+		[df removeItemAtPath:[lyricCacheDir stringByAppendingPathComponent:filename] error:nil];
+	}
 }
 
 %end
