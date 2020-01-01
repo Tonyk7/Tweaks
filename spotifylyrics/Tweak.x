@@ -3,8 +3,9 @@
 
 /* tweak based on https://github.com/julioverne/MusiLyric */
 
-#define kLyricViewTag 420420
 #define tmpLyricDir [NSTemporaryDirectory() stringByAppendingString:@"SpotifyLyrics/"]
+#define failText @"No lyrics found"
+#define kLyricViewTag 420420
 
 @interface SPTAlertController : NSObject
 -(void)showAlertWithTitle:(NSString *)arg1 message:(NSString *)arg2 buttonText:(NSString *)arg3 target:(NSObject *)arg4 action:(SEL)arg5 withCancelButton:(BOOL)arg6;
@@ -89,14 +90,14 @@
 
 -(void)updateLyricsWithTrackTitle:(NSString *)title artist:(NSString *)artist album:(NSString *)album {
 	if (!title || !artist || !album) {
-		[self updateLyricsTextViewWithText:@"failed"];
+		[self updateLyricsTextViewWithText:failText];
 		return;
 	}
 	NSString *formattedName = [NSString stringWithFormat:@"%@-%@", artist, title];
 	NSString *tmpLyricFilePath = [tmpLyricDir stringByAppendingString:[formattedName sha1]];
 	if (!access(tmpLyricFilePath.UTF8String, F_OK)) {
 		NSString *lyrics = [NSString stringWithContentsOfFile:tmpLyricFilePath encoding:NSUTF8StringEncoding error:nil];
-		[self updateLyricsTextViewWithText:lyrics ?: @"failed"];
+		[self updateLyricsTextViewWithText:lyrics ?: failText];
 	} else {
 		NSString *url = [[NSString stringWithFormat:@"https://apic.musixmatch.com/ws/1.1/macro.subtitles.get?app_id=mac-ios-v2.0&usertoken=1806241a800384d1588f4bde531da16e19ac746268a4999ebae016&q_track=%@&q_artist=%@&q_album=%@&format=json&page_size=1", title, artist, album] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
 		NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -106,7 +107,7 @@
 			NSDictionary *results = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
 			NSDictionary *lyrics_body = results[@"message"][@"body"][@"macro_calls"][@"track.lyrics.get"][@"message"][@"body"];
 			BOOL lyrics_avaliable = lyrics_body.count > 0;
-			[self updateLyricsTextViewWithText:lyrics_avaliable ? [lyrics_body valueForKeyPath:@"lyrics.lyrics_body"]: @"failed"];
+			[self updateLyricsTextViewWithText:lyrics_avaliable ? [lyrics_body valueForKeyPath:@"lyrics.lyrics_body"]: failText];
 			if (lyrics_avaliable)
 				[[lyrics_body valueForKeyPath:@"lyrics.lyrics_body"] writeToFile:tmpLyricFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
 		}] resume];
