@@ -1,5 +1,4 @@
 # Tweaks
-hope something helps you in some way \#LLJ
 
 [repo](https://tonyk7.github.io/)
 
